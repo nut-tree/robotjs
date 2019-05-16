@@ -1,6 +1,6 @@
 {
   "name": "@nut-tree/robotjs",
-  "version": "0.5.1-b1",
+  "version": "0.5.2-rc1",
   "description": "This is a fork of octalmage/robotjs with additional prebuilts",
   "main": "index.js",
   "typings": "index.d.ts",
