@@ -1,4 +1,13 @@
 sudo: false
+language: node_js
+node_js:
+  - "8"
+  - "10"
+  - "11"
+
+os:
+  - linux
+  - osx
 
 cache:
   directories:
@@ -6,21 +15,6 @@ cache:
 
 git:
   depth: 5
-
-matrix:
-  include:
-    - os: linux
-      node_js: '8'
-    - os: linux
-      node_js: '10'
-    - os: linux
-      node_js: '11'
-    - os: osx
-      node_js: '8'
-    - os: osx
-      node_js: '10'
-    - os: osx
-      node_js: '11'
 
 addons:
   apt:
@@ -41,6 +35,7 @@ before_install:
 
   # use g++-4.8 on Linux
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
+  - $CXX --version
 
 before_script:
   # Start xvfb
