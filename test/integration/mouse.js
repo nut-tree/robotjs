@@ -3,7 +3,7 @@ var robot = require('../..');
 var targetpractice = require('targetpractice/index.js');
 var os = require('os');
 
-robot.setMouseDelay(100);
+robot.setMouseDelay(50);
 
 var target, elements;
 
