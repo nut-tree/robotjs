@@ -3,12 +3,16 @@ var robot = require('../..');
 var targetpractice = require('targetpractice/index.js');
 var os = require('os');
 
-robot.setMouseDelay(50);
+robot.setMouseDelay(100);
 
 var target, elements;
 
 describe('Integration/Mouse', () => {
+	let defaultTimeout;
 	beforeEach(done => {
+		defaultTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
 		target = targetpractice.start();
 		target.once('elements', message => {
 			elements = message;
@@ -17,6 +21,7 @@ describe('Integration/Mouse', () => {
 	});
 
 	afterEach(() => {
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultTimeout;
 		targetpractice.stop();
 		target = null;
 	});
@@ -35,7 +40,7 @@ describe('Integration/Mouse', () => {
 		// Click it!
 		robot.moveMouse(button_1.x, button_1.y);
 		robot.mouseClick();
-	});
+	})
 
 	it('scrolls vertically', done => {
 		target.once('scroll', element => {
