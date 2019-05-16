@@ -13,7 +13,6 @@ cache:
 clone_depth: 5
 
 platform:
-  - x86
   - x64
 
 # Install scripts. (runs after repo cloning)
