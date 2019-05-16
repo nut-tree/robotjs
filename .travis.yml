@@ -12,10 +12,20 @@ cache:
 git:
   depth: 5
 
-env:
-  matrix:
-  - TRAVIS_NODE_VERSION="8"
-  - TRAVIS_NODE_VERSION="stable"
+matrix:
+  include:
+    - os: linux
+      node_js: '8'
+    - os: linux
+      node_js: '10'
+    - os: linux
+      node_js: '11'
+    - os: osx
+      node_js: '8'
+    - os: osx
+      node_js: '10'
+    - os: osx
+      node_js: '11'
 
 addons:
   apt:
@@ -56,11 +66,3 @@ script:
 
 after_success:
   - if [[ $TRAVIS_TAG != "" ]]; then npm run prebuild -- -u $GITHUB_TOKEN; fi
-
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/e737dd5170be50cdba95
-    on_success: change
-    on_failure: always
-    on_start: never
