@@ -1,7 +1,7 @@
 {
-  "name": "robotjs",
-  "version": "0.5.1",
-  "description": "Node.js Desktop Automation.",
+  "name": "@nut-tree/robotjs",
+  "version": "0.5.1-b1",
+  "description": "This is a fork of octalmage/robotjs with additional prebuilts",
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/octalmage/robotjs.git"
+    "url": "https://github.com/nut-tree/robotjs.git"
   },
   "keywords": [
     "Automation",
@@ -36,9 +36,9 @@
   "license": "MIT",
   "gypfile": true,
   "bugs": {
-    "url": "https://github.com/octalmage/robotjs/issues"
+    "url": "https://github.com/nut-tree/robotjs/issues"
   },
-  "homepage": "https://github.com/octalmage/robotjs",
+  "homepage": "https://github.com/nut-tree/robotjs",
   "dependencies": {
     "nan": "^2.2.1",
     "prebuild-install": "^2.1.1"
