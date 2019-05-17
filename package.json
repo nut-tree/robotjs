@@ -1,6 +1,6 @@
 {
   "name": "@nut-tree/robotjs",
-  "version": "0.5.2-rc2",
+  "version": "0.5.2-rc3",
   "description": "This is a fork of octalmage/robotjs with additional prebuilts",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -8,7 +8,7 @@
     "test": "run-script-os",
     "test:darwin:linux": "jasmine 'test/**/*.js'",
     "test:win32": "jasmine test/**/*.js",
-    "install": "prebuild-install || node-gyp rebuild",
+    "install": "prebuild-install --verbose || node-gyp rebuild",
     "prebuild": "prebuild"
   },
   "repository": {
