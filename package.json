@@ -1,6 +1,6 @@
 {
   "name": "robotjs-node10",
-  "version": "0.5.3-beta3",
+  "version": "0.5.3",
   "description": "This is a fork of octalmage/robotjs with prebuilts for node 10",
   "main": "index.js",
   "typings": "index.d.ts",
