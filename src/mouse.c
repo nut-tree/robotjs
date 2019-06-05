@@ -102,7 +102,7 @@ void moveMouse(MMPoint point)
 	CGEventSourceRef src = CGEventSourceCreate
 		(kCGEventSourceStateHIDSystemState);
 
-	CGEventRef evt = nullptr;
+	CGEventRef evt = NULL;
 	if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonLeft)) {
 		// Create a left button drag
 		evt = CGEventCreateMouseEvent
@@ -124,7 +124,9 @@ void moveMouse(MMPoint point)
 
 	// Post mouse event and release
 	CGEventPost (kCGHIDEventTap, evt);
-	CFRelease (evt);
+	if (evt != NULL) {
+		CFRelease (evt);
+	}
 	CFRelease (src);
 #endif
 #ifdef IS_WINDOWS
