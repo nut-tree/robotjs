@@ -90,35 +90,45 @@ void calculateDeltas(CGEventRef *event, MMPoint point)
  */
 void moveMouse(MMPoint point)
 {
-#if defined(IS_MACOSX)
-	CGEventRef move = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved,
-	                                          CGPointFromMMPoint(point),
-	                                          kCGMouseButtonLeft);
-
-	calculateDeltas(&move, point);
-
-	CGEventPost(kCGSessionEventTap, move);
-	CFRelease(move);
-#elif defined(USE_X11)
+#ifdef USE_X11
 	Display *display = XGetMainDisplay();
 	XWarpPointer(display, None, DefaultRootWindow(display),
 	             0, 0, 0, 0, point.x, point.y);
 	XSync(display, false);
-#elif defined(IS_WINDOWS)
-	//Mouse motion is now done using SendInput with MOUSEINPUT. We use Absolute mouse positioning
-	#define MOUSE_COORD_TO_ABS(coord, width_or_height) (((65536 * coord) / width_or_height) + (coord < 0 ? -1 : 1))
-	point.x = MOUSE_COORD_TO_ABS(point.x, GetSystemMetrics(SM_CXSCREEN));
-	point.y = MOUSE_COORD_TO_ABS(point.y, GetSystemMetrics(SM_CYSCREEN));
-	INPUT mouseInput;
-	mouseInput.type = INPUT_MOUSE;
-	mouseInput.mi.dx = point.x;
-	mouseInput.mi.dy = point.y;
-	mouseInput.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE;
-	mouseInput.mi.time = 0; //System will provide the timestamp
-	mouseInput.mi.dwExtraInfo = 0;
-	mouseInput.mi.mouseData = 0;
-	SendInput(1, &mouseInput, sizeof(mouseInput));
+#endif
+#ifdef IS_MACOSX
+	CGPoint position = CGPointMake (point.x, point.y);
+	// Create an HID hardware event source
+	CGEventSourceRef src = CGEventSourceCreate
+		(kCGEventSourceStateHIDSystemState);
 
+	CGEventRef evt = nullptr;
+	if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonLeft)) {
+		// Create a left button drag
+		evt = CGEventCreateMouseEvent
+			(src, kCGEventLeftMouseDragged,
+			 position, kCGMouseButtonLeft);
+	} else {
+		if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonRight)) {
+			// Create a right button drag
+			evt = CGEventCreateMouseEvent
+				(src, kCGEventRightMouseDragged,
+				 position, kCGMouseButtonLeft);
+		} else {
+			// Create a mouse move event
+			evt = CGEventCreateMouseEvent
+				(src, kCGEventMouseMoved,
+				 position, kCGMouseButtonLeft);
+		}
+	}
+
+	// Post mouse event and release
+	CGEventPost (kCGHIDEventTap, evt);
+	CFRelease (evt);
+	CFRelease (src);
+#endif
+#ifdef IS_WINDOWS
+	SetCursorPos (point.x, point.y);
 #endif
 }
 
