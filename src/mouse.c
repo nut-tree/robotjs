@@ -187,12 +187,14 @@ void toggleMouse(bool down, MMMouseButton button)
 #if defined(IS_MACOSX)
 	const CGPoint currentPos = CGPointFromMMPoint(getMousePos());
 	const CGEventType mouseType = MMMouseToCGEventType(down, button);
-	CGEventRef event = CGEventCreateMouseEvent(NULL,
+	CGEventSourceRef src = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+	CGEventRef event = CGEventCreateMouseEvent(src,
 	                                           mouseType,
 	                                           currentPos,
 	                                           (CGMouseButton)button);
 	CGEventPost(kCGSessionEventTap, event);
 	CFRelease(event);
+	CFRelease(src);
 #elif defined(USE_X11)
 	Display *display = XGetMainDisplay();
 	XTestFakeButtonEvent(display, button, down ? True : False, CurrentTime);
