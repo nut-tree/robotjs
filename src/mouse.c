@@ -99,18 +99,19 @@ void moveMouse(MMPoint point)
 #ifdef IS_MACOSX
 	CGPoint position = CGPointMake (point.x, point.y);
 	// Create an HID hardware event source
-	CGEventSourceRef src = CGEventSourceCreate
-		(kCGEventSourceStateHIDSystemState);
+	CGEventSourceRef src = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
 
 	CGEventRef evt = NULL;
 	if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonLeft)) {
 		// Create a left button drag
+		printf("left button pressed, drag");
 		evt = CGEventCreateMouseEvent
 			(src, kCGEventLeftMouseDragged,
 			 position, kCGMouseButtonLeft);
 	} else {
 		if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonRight)) {
 			// Create a right button drag
+            printf("right button pressed, drag");
 			evt = CGEventCreateMouseEvent
 				(src, kCGEventRightMouseDragged,
 				 position, kCGMouseButtonLeft);
@@ -137,14 +138,16 @@ void moveMouse(MMPoint point)
 void dragMouse(MMPoint point, const MMMouseButton button)
 {
 #if defined(IS_MACOSX)
+	CGEventSourceRef src = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
 	const CGEventType dragType = MMMouseDragToCGEventType(button);
-	CGEventRef drag = CGEventCreateMouseEvent(NULL, dragType,
+	CGEventRef drag = CGEventCreateMouseEvent(src, dragType,
 	                                                CGPointFromMMPoint(point),
 	                                                (CGMouseButton)button);
 	calculateDeltas(&drag, point);
 
-	CGEventPost(kCGSessionEventTap, drag);
+	CGEventPost(kCGHIDEventTap, drag);
 	CFRelease(drag);
+	CFRelease(src);
 #else
 	moveMouse(point);
 #endif
@@ -153,9 +156,11 @@ void dragMouse(MMPoint point, const MMMouseButton button)
 MMPoint getMousePos()
 {
 #if defined(IS_MACOSX)
-	CGEventRef event = CGEventCreate(NULL);
+	CGEventSourceRef src = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+	CGEventRef event = CGEventCreate(src);
 	CGPoint point = CGEventGetLocation(event);
 	CFRelease(event);
+	CFRelease(src);
 
 	return MMPointFromCGPoint(point);
 #elif defined(USE_X11)
@@ -192,7 +197,9 @@ void toggleMouse(bool down, MMMouseButton button)
 	                                           mouseType,
 	                                           currentPos,
 	                                           (CGMouseButton)button);
-	CGEventPost(kCGSessionEventTap, event);
+	CGEventPost(kCGHIDEventTap, event);
+	printf("mouse state left: %d", CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, kCGMouseButtonLeft));
+	printf("mouse state right: %d", CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, kCGMouseButtonRight));
 	CFRelease(event);
 	CFRelease(src);
 #elif defined(USE_X11)
@@ -224,7 +231,8 @@ void doubleClick(MMMouseButton button)
 	const CGEventType mouseTypeDown = MMMouseToCGEventType(true, button);
 	const CGEventType mouseTypeUP = MMMouseToCGEventType(false, button);
 
-	CGEventRef event = CGEventCreateMouseEvent(NULL, mouseTypeDown, currentPos, kCGMouseButtonLeft);
+	CGEventSourceRef src = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+	CGEventRef event = CGEventCreateMouseEvent(src, mouseTypeDown, currentPos, kCGMouseButtonLeft);
 
 	/* Set event to double click. */
 	CGEventSetIntegerValueField(event, kCGMouseEventClickState, 2);
@@ -235,6 +243,7 @@ void doubleClick(MMMouseButton button)
 	CGEventPost(kCGHIDEventTap, event);
 
 	CFRelease(event);
+	CFRelease(src);
 
 #else
 
