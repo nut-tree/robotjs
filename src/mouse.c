@@ -104,14 +104,12 @@ void moveMouse(MMPoint point)
 	CGEventRef evt = NULL;
 	if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonLeft)) {
 		// Create a left button drag
-		printf("left button pressed, drag");
 		evt = CGEventCreateMouseEvent
 			(src, kCGEventLeftMouseDragged,
 			 position, kCGMouseButtonLeft);
 	} else {
 		if (CGEventSourceButtonState (kCGEventSourceStateHIDSystemState, kCGMouseButtonRight)) {
 			// Create a right button drag
-            printf("right button pressed, drag");
 			evt = CGEventCreateMouseEvent
 				(src, kCGEventRightMouseDragged,
 				 position, kCGMouseButtonLeft);
@@ -198,8 +196,6 @@ void toggleMouse(bool down, MMMouseButton button)
 	                                           currentPos,
 	                                           (CGMouseButton)button);
 	CGEventPost(kCGHIDEventTap, event);
-	printf("mouse state left: %d", CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, kCGMouseButtonLeft));
-	printf("mouse state right: %d", CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, kCGMouseButtonRight));
 	CFRelease(event);
 	CFRelease(src);
 #elif defined(USE_X11)
