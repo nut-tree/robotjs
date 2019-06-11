@@ -1,6 +1,6 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
-- platform: x64
+platform: x64
 
 environment:
   matrix:
