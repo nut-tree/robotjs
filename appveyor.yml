@@ -1,13 +1,12 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
-# Test against these versions of Io.js and Node.js.
+- platform: x64
+
 environment:
   matrix:
   # node.js
     - nodejs_version: 10
     - nodejs_version: 11
-    - platform: x64
-    - platform: x86
 
 cache:
   - node_modules
