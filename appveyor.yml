@@ -4,16 +4,15 @@
 environment:
   matrix:
   # node.js
-    - nodejs_version: "10"
-    - nodejs_version: "11"
+    - nodejs_version: 10
+    - nodejs_version: 11
+    - platform: x64
+    - platform: x86
 
 cache:
   - node_modules
 
 clone_depth: 5
-
-platform:
-  - x64
 
 # Install scripts. (runs after repo cloning)
 install:
