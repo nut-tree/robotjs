@@ -1,7 +1,5 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
-platform: x64
-
 environment:
   matrix:
   # node.js
@@ -12,6 +10,10 @@ cache:
   - node_modules
 
 clone_depth: 5
+
+platform:
+  - x86
+  - x64
 
 # Install scripts. (runs after repo cloning)
 install:
